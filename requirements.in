@@ -1,0 +1,14 @@
+beanie
+fastapi
+geojson-pydantic
+motor
+passlib[bcrypt]
+pydantic
+pydantic[email]
+python-decouple
+python-jose[cryptography]
+python-multipart
+strawberry-graphql
+structlog
+typing
+uvicorn[standard]
