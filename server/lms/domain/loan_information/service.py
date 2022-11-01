@@ -46,13 +46,13 @@ class LoanInformationService:
         logger.info("Got loan informations by ID", entry=loan_information)
         return loan_information
 
-    async def collect(self) -> list[fields.LoanInformationOut]:
+    async def collect(self, **kwargs) -> list[fields.LoanInformationOut]:
         """Collect all loan informations.
         Returns:
             list[LoanInformationOut]: list of loan informations.
         """
         logger.info("Collecting loan informations")
-        loan_informations = await self.repository.collect()
+        loan_informations = await self.repository.collect(**kwargs)
         logger.info("Collected loan informations", qty=len(loan_informations))
         return loan_informations
 

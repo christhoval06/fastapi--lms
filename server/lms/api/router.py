@@ -6,15 +6,17 @@ from strawberry.asgi import GraphQL
 
 from lms.api.schema import schema
 
-from lms.domain.borrowers.registry import borrowers_registry
-from lms.domain.loan_information.registry import loan_informations_registry
+from lms.domain import borrowers_srv, linfo_srv, payments_srv, loan_offer_srv, reports_srv
 
 
 class CustomContext(BaseContext):
     def __init__(self):
         super(CustomContext, self).__init__()
-        self.borrowers_srv = borrowers_registry.service
-        self.linfo_srv = loan_informations_registry.service
+        self.borrowers_srv = borrowers_srv
+        self.linfo_srv = linfo_srv
+        self.payments_srv = payments_srv
+        self.loan_offer_srv = loan_offer_srv
+        self.reports_srv = reports_srv
 
 
 def custom_context_dependency() -> CustomContext:

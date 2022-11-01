@@ -1,0 +1,8 @@
+{
+  "builds": [
+    {"src": "/server/lms/main.py", "use": "@vercel/python"}
+  ],
+  "routes": [
+    {"src": "/(.*)", "dest": "server/lms/main.py"}
+  ]
+}

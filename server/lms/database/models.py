@@ -2,6 +2,7 @@
 
 import datetime
 from enum import Enum
+from decimal import Decimal
 
 import pymongo
 from bson import objectid, ObjectId
@@ -19,10 +20,12 @@ class Model(Document):
     created_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
 
 
+@strawberry.type
 class Admin(Model):
     fullname: str
     email: EmailStr
     password: str
+    active: bool
 
     class Collection:
         name = "admins"
@@ -78,8 +81,41 @@ class LoanInformation(Model):
 
     borrower_id: PydanticObjectId
     loan_date: datetime.datetime = Field(default_factory=datetime.datetime.now)
-    loan_due: float
+    loan_due: Decimal
     payment_range: PaymentRange
 
     class Settings:
         name = "loans_information"
+
+
+class LoanOffer(Model):
+    loan_name: str
+    amount: Decimal
+    loan_range: PaymentRange
+    interest: float
+
+    class Settings:
+        name = "loan_offers"
+
+
+class Payment(Model):
+    information_id: PydanticObjectId
+    borrower_id: PydanticObjectId
+    amount: Decimal
+    interest: Decimal
+    total: Decimal
+    paymment_date: datetime.datetime = Field(default_factory=datetime.datetime.now)
+
+    class Settings:
+        name = "payments"
+
+
+class Report(Model):
+    borrower_id: PydanticObjectId
+    payment_id: PydanticObjectId
+    information_id: PydanticObjectId
+    loan_id: PydanticObjectId
+    date: datetime.datetime = Field(default_factory=datetime.datetime.now)
+
+    class Settings:
+        name = "reports"
