@@ -16,7 +16,6 @@ COPY requirements.in /usr/src/app/requirements.in
 
 RUN pip-compile requirements.in
 
-# COPY requirements.txt /usr/src/panama/requirements.txt
 RUN pip install -r requirements.txt
 
 # copy project
