@@ -94,7 +94,7 @@ structlog==22.1.0
     # via -r server/requirements.in
 toml==0.10.2
     # via beanie
-typing==3.7.4.3
+# typing==3.7.4.3
     # via -r server/requirements.in
 typing-extensions==4.4.0
     # via
