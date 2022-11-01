@@ -1,8 +1,14 @@
 {
-  "builds": [
-    {"src": "/server/lms/main.py", "use": "@vercel/python"}
-  ],
-  "routes": [
-    {"src": "/(.*)", "dest": "server/lms/main.py"}
+  "functions": {
+    "server/lms/main.py": {
+      "memory": 3008,
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "server/lms/main.py"
+    }
   ]
 }
