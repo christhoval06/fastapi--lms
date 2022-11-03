@@ -3,7 +3,7 @@
 from decouple import config
 from pydantic import BaseSettings
 
-VERSION_CODE = (0, 0, 1)
+VERSION_CODE = (0, 0, 2)
 
 
 class Settings(BaseSettings):
@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     DEBUG: bool = config("DEBUG", default=False)
 
     # Database
-    DATABASE_URL: str = config("MONGO_URI")
-    MONGO_URI: str = config("MONGO_URI")
+    DATABASE_URL: str = config("MONGODB_URI")
+    MONGO_URI: str = config("MONGODB_URI")
 
     # JWT
     JWT_SECRET_KEY: str = config('JWT_SECRET_KEY')
