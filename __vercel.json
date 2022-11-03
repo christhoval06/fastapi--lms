@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "lms/main.py": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "lms/main.py"
+    }
+  ]
+
+}

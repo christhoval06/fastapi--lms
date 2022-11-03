@@ -19,6 +19,6 @@ RUN pip-compile requirements.in
 RUN pip install -r requirements.txt
 
 # copy project
-COPY server/ /usr/src/app/
+COPY ./ /usr/src/app/
 
 EXPOSE 8000
