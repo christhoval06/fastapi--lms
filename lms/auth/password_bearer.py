@@ -5,9 +5,10 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from pydantic import ValidationError
 
-from app.config.config import settings
-from app.database.schemas import TokenPayload
-from app.models.admin import Admin
+from lms.settings import settings
+
+from lms.database.schemas import TokenPayload
+from lms.database import models
 
 reuseable_oauth = OAuth2PasswordBearer(
     tokenUrl="/admin/login/form",
@@ -15,10 +16,10 @@ reuseable_oauth = OAuth2PasswordBearer(
 )
 
 
-async def get_current_user(token: str = Depends(reuseable_oauth)) -> Admin:
+async def get_current_user(token: str = Depends(reuseable_oauth)) -> models.Admin:
     try:
         payload = jwt.decode(
-            token, settings.jwt_secret_key, algorithms=[settings.algorithm]
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.algorithm]
         )
         token_data = TokenPayload(**payload)
 
@@ -35,7 +36,7 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> Admin:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user = await Admin.find_one(Admin.email == token_data.sub)
+    user = await models.Admin.find_one(models.Admin.email == token_data.sub)
 
     if user is None:
         raise HTTPException(

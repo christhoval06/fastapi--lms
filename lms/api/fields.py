@@ -1,11 +1,11 @@
 """API interfaces."""
 
 import typing as T
-import uuid
 
 import strawberry
 from beanie import Document, PydanticObjectId
 from bson import objectid, ObjectId
+from pydantic import BaseModel
 
 M = T.TypeVar("M", bound="Interface")
 
@@ -20,14 +20,14 @@ class Interface:
     """Generic API interface."""
 
     @classmethod
-    def from_orm(cls: type[M], entry: Document) -> M:
+    def from_orm(cls: type[M], entry: Document, **kwargs) -> M:
         """Create a new instance from an ORM entry.
         Args:
             entry (Document): ORM entry.
         Returns:
             InterfaceObj: new instance.
         """
-        return cls(**entry.dict())
+        return cls(**entry.dict(**kwargs))
 
     def to_dict(self, exclude_unset=False) -> dict:
         """Convert the instance to a dict.
@@ -44,6 +44,13 @@ class Interface:
             for key, value in self.__dict__.items()
             if value is not None
         }
+
+
+# @strawberry.interface
+# class InterfaceWithCreateAt(Interface):
+#     @strawberry.field
+#     def created_at_formatted(self, formatted: T.Optional[str] = '%d/%m/%Y') -> str:
+#         return self.created_at.strftime(formatted)
 
 
 @strawberry.interface

@@ -24,7 +24,7 @@ class Repository(
     table: type[M]
     schema: type[types.OutSchema]
 
-    async def create(self, data_object: types.CreateSchema) -> types.OutSchema:
+    async def create(self, data_object: types.CreateSchema, **kwargs) -> types.OutSchema:
         """Create a new entry.
         Args:
             data_object (types.CreateSchema): input data object.

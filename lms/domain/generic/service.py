@@ -1,99 +1,95 @@
 """Model logic for the generics domain."""
 
-from structlog import get_logger
+from typing import TypeVar, Generic
+
 from bson import ObjectId
+from structlog import get_logger
 
 from lms.api.v1 import fields
 from lms.domain.repositories import generic
 
 logger = get_logger(__name__)
 
+TOut = TypeVar('TOut')
+TCreate = TypeVar('TCreate')
+TUpdate = TypeVar('TUpdate')
 
-class GenericService:
+
+class GenericService(Generic[TOut, TCreate, TUpdate]):
     """Orchestrator for the generics domain.
     Contains the business logic around the generics model operations.
     """
 
     def __init__(self, repository: generic.Repository) -> None:
         self.repository = repository
+        self.table = self.repository.table
+        self.schema = self.repository.schema
 
-    async def create(
-            self,
-            data_object: fields.BorrowerCreate,
-    ) -> fields.BorrowerOut:
-        """Create a new borrower.
+    async def create(self, data_object: TCreate, **kwargs) -> TOut:
+        """Create a model.
         Args:
-            data_object (BorrowerCreate): input data.
+            data_object (TCreate): input data.
         Returns:
-            BorrowerOut: representation of the created borrower.
+            TOut: representation of the created model.
         """
-        logger.info("Creating borrower", data=data_object)
-        logger.info("Creating borrower", data=data_object)
-        borrower = await self.repository.create(data_object)
-        logger.info("Created borrower", entry=borrower)
-        return borrower
+        logger.info(f"Creating {self.repository.table.__name__}", data=data_object)
+        item = await self.repository.create(data_object, **kwargs)
+        logger.info(f"Created {self.repository.table.__name__}", entry=item)
+        return item
 
-    async def get_by_id(self, pk: ObjectId) -> fields.BorrowerOut:
-        """Get a borrower by its ID.
+    async def get_by_id(self, pk: ObjectId) -> TOut:
+        """Get a model by its ID.
         Args:
-            pk (ObjectId): borrower ID.
+            pk (ObjectId): model ID.
         Returns:
-            BorrowerOut: representation of the borrower.
+            TOut: representation of the model.
         """
-        logger.info("Getting borrower", id=pk)
-        borrower = await self.repository.get_by_id(pk)
-        logger.info("Got borrower by ID", entry=borrower)
-        return borrower
+        logger.info(f"Getting {self.repository.table.__name__}", id=pk)
+        item = await self.repository.get_by_id(pk)
+        logger.info(f"Got {self.repository.table.__name__} by ID", entry=item)
+        return item
 
-    async def collect(self) -> list[fields.BorrowerOut]:
-        """Collect all generics.
+    async def collect(self) -> list[TOut]:
+        """Collect all models.
         Returns:
-            list[BorrowerOut]: list of generics.
+            list[TOut]: list of model.
         """
-        logger.info("Collecting generics")
-        generics = await self.repository.collect()
-        logger.info("Collected generics", qty=len(generics))
-        return generics
+        logger.info(f"Collecting {self.repository.table.__name__}")
+        items = await self.repository.collect()
+        logger.info(f"Collected {self.repository.table.__name__}", qty=len(items))
+        return items
 
     async def delete(self, pk: ObjectId) -> None:
-        """Delete a borrower.
+        """Delete a model.
         Args:
-            pk (ObjectId): borrower ID.
+            pk (ObjectId): model ID.
         """
-        logger.info("Deleting borrower", id=pk)
+        logger.info(f"Deleting {self.repository.table.__name__}", id=pk)
         await self.repository.delete(pk)
-        logger.info("Deleted borrower", id=pk)
+        logger.info(f"Deleted {self.repository.table.__name__}", id=pk)
 
-    async def update(
-            self,
-            pk: ObjectId,
-            data_object: fields.BorrowerUpdate,
-    ) -> fields.BorrowerOut:
-        """Update a borrower.
+    async def update(self, pk: ObjectId, data_object: TUpdate) -> TOut:
+        """Update a model.
         Args:
-            pk (ObjectId): borrower ID.
-            data_object (BorrowerUpdate): input data.
+            pk (ObjectId): model ID.
+            data_object (TUpdate): input data.
         Returns:
-            BorrowerOut: updated borrower.
+            TOut: updated model.
         """
-        logger.info("Updating borrower", id=pk, data=data_object)
-        borrower = await self.repository.update(pk, data_object)
-        logger.info("Updated borrower", entry=borrower)
-        return borrower
+        logger.info(f"Updating {self.repository.table.__name__}", id=pk, data=data_object)
+        item = await self.repository.update(pk, data_object)
+        logger.info(f"Updated {self.repository.table.__name__}", entry=item)
+        return item
 
-    async def update_many(
-            self,
-            ids: list[ObjectId],
-            data_object: fields.BorrowerUpdate,
-    ) -> list[fields.BorrowerOut]:
-        """Update many generics.
+    async def update_many(self, ids: list[ObjectId], data_object: TUpdate) -> list[TOut]:
+        """Update many models.
         Args:
-            ids (list[ObjectId]): list of borrower IDs.
-            data_object (BorrowerUpdate): input data.
+            ids (list[ObjectId]): list of models IDs.
+            data_object (TUpdate): input data.
         Returns:
-            list[BorrowerOut]: list of updated generics.
+            list[TOut]: list of updated model.
         """
-        logger.info("Updating generics", ids=ids, data=data_object)
-        generics = await self.repository.update_many(ids, data_object)
-        logger.info("Updated generics", qty=len(generics))
-        return generics
+        logger.info(f"Updating {self.repository.table.__name__}", ids=ids, data=data_object)
+        items = await self.repository.update_many(ids, data_object)
+        logger.info(f"Updated {self.repository.table.__name__}", qty=len(items))
+        return items

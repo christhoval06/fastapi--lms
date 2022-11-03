@@ -6,7 +6,7 @@ from strawberry.asgi import GraphQL
 
 from lms.api.schema import schema
 
-from lms.domain import borrowers_srv, linfo_srv, payments_srv, loan_offer_srv, reports_srv
+from lms.domain import borrowers_srv, linfo_srv, payments_srv, loan_offer_srv, reports_srv, users_srv
 
 
 class CustomContext(BaseContext):
@@ -17,6 +17,7 @@ class CustomContext(BaseContext):
         self.payments_srv = payments_srv
         self.loan_offer_srv = loan_offer_srv
         self.reports_srv = reports_srv
+        self.users_srv = users_srv
 
 
 def custom_context_dependency() -> CustomContext:

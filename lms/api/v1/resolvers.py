@@ -5,11 +5,10 @@ import uuid
 from bson import ObjectId
 from strawberry.types import Info
 
-from lms.api.v1 import fields
 from lms.api import fields as base_fields
-from lms.domain import borrowers_srv, linfo_srv, loan_offer_srv, payments_srv, reports_srv
-
+from lms.api.v1 import fields
 from lms.database import models
+from lms.domain import borrowers_srv, linfo_srv, loan_offer_srv, payments_srv, reports_srv, users_srv
 
 
 async def get_borrowers() -> list[fields.BorrowerOut]:
@@ -126,3 +125,23 @@ async def get_report(report_id: base_fields.PyObjectId) -> fields.ReportOut:
         ReportOut: retrieved reports.
     """
     return await reports_srv.get_by_id(report_id)
+
+
+async def create_user(data: fields.AdminCreate) -> fields.AdminOut:
+    """Create new user.
+        Args:
+            # data_object (AdminCreate): input data.
+        Returns:
+            AdminOut: created Admin.
+        """
+    return await users_srv.create(data)
+
+
+async def user_login(username: str, password: str) -> fields.AuthToken:
+    """
+    Sign In exists user.
+    :param username: str
+    :param password: str
+    :return:
+    """
+    return await users_srv.login(username, password)

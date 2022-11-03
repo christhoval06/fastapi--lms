@@ -38,7 +38,7 @@ class MongoRepository(
     table: type[Model]
     schema: type[types.OutSchema]
 
-    async def create(self, data_object: types.CreateSchema) -> types.OutSchema:
+    async def create(self, data_object: types.CreateSchema, **kwargs) -> types.OutSchema:
         """Create a new entry.
         Args:
             data_object (CreateSchema): input data object.
@@ -46,7 +46,7 @@ class MongoRepository(
             OutSchema: output data representation.
         """
         entry = await self.table(**data_object.to_dict()).insert()
-        return self.schema.from_orm(entry)
+        return self.schema.from_orm(entry, **kwargs)
 
     async def collect(self, **filters) -> list[types.OutSchema]:
         """Collect all entries nased on the query.

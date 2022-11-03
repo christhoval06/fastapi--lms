@@ -1,13 +1,8 @@
 """Set of pre-instantiated dependencies for the borrowers domain."""
 
-from lms.domain.borrowers.repository import BorrowersOdmRepository
-from lms.domain.borrowers.service import BorrowerService
+from lms.domain.generic.registry import GenericRegistry
 
+from .repository import BorrowersOdmRepository
+from .service import BorrowerService
 
-class BorrowersRegistry:
-    """Registry of dependencies for the borrowers domain."""
-
-    service = BorrowerService(repository=BorrowersOdmRepository())
-
-
-borrowers_registry = BorrowersRegistry()
+borrowers_registry = GenericRegistry(repository=BorrowersOdmRepository(), service=BorrowerService)

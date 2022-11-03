@@ -5,16 +5,16 @@ from lms.database import models
 from lms.domain.repositories import database, generic
 
 
-class GenericOdmRepository(
+class UsersOdmRepository(
     database.MongoRepository[
-        models.Borrower,
-        fields.BorrowerCreate,
-        fields.BorrowerUpdate,
-        fields.BorrowerOut,
+        models.Admin,
+        fields.AdminCreate,
+        fields.AdminUpdate,
+        fields.AdminOut,
     ]
 ):
     """Borrowers ODM repository."""
 
-    def __init__(self, table, schema):
-        self.table = table
-        self.schema = schema
+    def __init__(self):
+        self.table = models.Admin
+        self.schema = fields.AdminOut

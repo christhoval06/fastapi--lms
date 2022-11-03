@@ -1,17 +1,20 @@
 """Database models."""
 
 import datetime
-from enum import Enum
 from decimal import Decimal
-
-import pymongo
-from bson import objectid, ObjectId
-
-import strawberry
-from beanie import Document, Indexed, Link, PydanticObjectId
-from pydantic import BaseModel, Field, EmailStr
+from enum import Enum
 from typing import Optional
 
+import pymongo
+import strawberry
+from beanie import Document, Indexed, Link, PydanticObjectId
+from bson import objectid, ObjectId
+from pydantic import BaseModel, Field, EmailStr
+from pymongo import IndexModel
+
+
+# https://www.analyticsvidhya.com/blog/2020/09/mongodb-indexes-pymongo-tutorial/
+# https://pymongo.readthedocs.io/en/stable/api/pymongo/operations.html#pymongo.operations.IndexModel
 
 class Model(Document):
     """Document model abstraction."""
@@ -20,9 +23,8 @@ class Model(Document):
     created_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
 
 
-@strawberry.type
 class Admin(Model):
-    fullname: str
+    full_name: str
     email: EmailStr
     password: str
     active: bool
@@ -38,6 +40,15 @@ class Admin(Model):
                 "password": "$ecr3tP@ss"
             }
         }
+
+    class Settings:
+        indexes = [
+            IndexModel(
+                [("email", pymongo.DESCENDING)],
+                name="email_string_index_DESCENDING_unique",
+                unique=True
+            ),
+        ]
 
 
 @strawberry.enum

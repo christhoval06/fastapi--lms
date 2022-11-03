@@ -1,8 +1,8 @@
 from fastapi import Request, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from app.models.admin import Admin
-from app.utils.jwt import decode_access_token
+from lms.database import models
+from lms.utils.jwt import decode_access_token
 
 
 class JWTBearer(HTTPBearer):
@@ -10,7 +10,7 @@ class JWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
-    async def __call__(self, request: Request) -> Admin:
+    async def __call__(self, request: Request) -> models.Admin:
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         if not credentials:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid authorization token")
@@ -22,7 +22,7 @@ class JWTBearer(HTTPBearer):
         if token_data is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token or expired token")
 
-        user = await Admin.find_one(Admin.email == token_data.sub)
+        user = await models.Admin.find_one(models.Admin.email == token_data.sub)
 
         if user is None:
             raise HTTPException(

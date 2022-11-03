@@ -1,15 +1,14 @@
 """GraphQL API fields."""
 
 import datetime
-from typing import Union, Optional, NewType, List
-from pydantic import BaseModel
 from decimal import Decimal
+from typing import Union, Optional, NewType, List
 
 import strawberry
-from strawberry.types import Info
-
-from bson import ObjectId
 from beanie import PydanticObjectId
+from bson import ObjectId
+from pydantic import BaseModel, EmailStr
+from strawberry.types import Info
 
 from lms.api import fields
 from lms.database import models
@@ -28,10 +27,6 @@ class BorrowerOut(fields.Interface):
     """Borrower output API model."""
 
     id: fields.PyObjectId
-
-    @strawberry.field
-    def created_at_formatted(self, formatted: Optional[str] = '%d/%m/%Y') -> str:
-        return self.created_at.strftime(formatted)
 
 
 @strawberry.type
@@ -69,10 +64,6 @@ class LoanInformationOut(fields.Interface):
     @strawberry.field
     async def borrower(self, info: Info) -> BorrowerOut:
         return await info.context.borrowers_srv.get_by_id(self.borrower_id)
-
-    @strawberry.field
-    def created_at_formatted(self, formatted: Optional[str] = '%d/%m/%Y') -> str:
-        return self.created_at.strftime(formatted)
 
     @strawberry.field
     def loan_date_formatted(self, formatted: Optional[str] = '%d/%m/%Y') -> str:
@@ -199,3 +190,51 @@ class ReportUpdate(fields.InterfaceId):
     loan_id: Optional[fields.PyObjectId] = None
 
     date: Union[datetime.datetime, None] = None
+
+
+@strawberry.experimental.pydantic.input(model=models.Admin,
+                                        fields=['full_name', 'password', 'email', 'active'])
+class AdminCreate(fields.Interface):
+    """Admin input API model."""
+    pass
+
+
+@strawberry.experimental.pydantic.type(model=models.Admin, fields=['created_at', 'full_name', 'email', 'active'])
+class AdminOut(fields.Interface):
+    """Admin output API model."""
+
+    id: fields.PyObjectId
+
+    # information_id: fields.PyObjectId
+    # borrower_id: fields.PyObjectId
+
+    # @strawberry.field
+    # async def borrower(self, info: Info) -> BorrowerOut:
+    #     return await info.context.borrowers_srv.get_by_id(self.borrower_id)
+    #
+    # @strawberry.field
+    # async def information(self, info: Info) -> LoanInformationOut:
+    #     return await info.context.linfo_srv.get_by_id(self.information_id)
+
+
+@strawberry.type
+class AdminUpdate(fields.InterfaceId):
+    """Admin update input API model."""
+
+    full_name: Union[str, None] = None
+    email: Union[EmailStr, None] = None
+    active: Union[bool, None] = None
+
+
+@strawberry.input
+class AuthLoginInput:
+    username: str
+    password: str
+
+
+@strawberry.type
+class AuthToken:
+    access_token: str
+    refresh_token: str
+    full_name: str
+    email: str

@@ -1,13 +1,8 @@
 """Set of pre-instantiated dependencies for the loan informations domain."""
 
-from lms.domain.loan_information.repository import LoanInformationsOdmRepository
-from lms.domain.loan_information.service import LoanInformationService
+from lms.domain.generic.registry import GenericRegistry
 
+from .repository import LoanInformationsOdmRepository
+from .service import LoanInformationService
 
-class LoanInformationsRegistry:
-    """Registry of dependencies for the loan informations domain."""
-
-    service = LoanInformationService(repository=LoanInformationsOdmRepository())
-
-
-loan_informations_registry = LoanInformationsRegistry()
+loans_information_registry = GenericRegistry(repository=LoanInformationsOdmRepository(), service=LoanInformationService)
