@@ -14,7 +14,7 @@ class IsAuthenticated(BasePermission):
         request: Union[Request, WebSocket] = info.context.request
         if "Authorization" in request.headers:
             result = VerifyToken(request.headers['Authorization'][7:]).verify()
-            if result == "error":
+            if result.status == "error":
                 return False
             if result.sub:
                 return True
