@@ -7,21 +7,11 @@ from beanie import Document, operators
 from structlog import get_logger
 
 from lms.domain.repositories import exceptions, types, generic
+from lms.utils.mongo import create_query
 
 logger = get_logger(__name__)
 
 Model = TypeVar("Model", bound=Document)
-
-
-def create_query(body: dict, model: type[Document]) -> dict:
-    """Create an orm query from a dict.
-    Args:
-        body (dict): payload.
-        model (type[Document]): orm model.
-    Returns:
-        dict: orm query.
-    """
-    return {getattr(model, key): value for key, value in body.items()}
 
 
 class MongoRepository(

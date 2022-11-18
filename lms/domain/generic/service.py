@@ -7,6 +7,7 @@ from structlog import get_logger
 
 from lms.api.v1 import fields
 from lms.domain.repositories import generic
+from lms.utils.mongo import create_query
 
 logger = get_logger(__name__)
 
@@ -58,6 +59,32 @@ class GenericService(Generic[TOut, TCreate, TUpdate]):
         items = await self.repository.collect()
         logger.info(f"Collected {self.repository.table.__name__}", qty=len(items))
         return items
+
+    async def paginate(self, page: int = 1, limit: int = 10, **filters) -> fields.ModelOutPaginate[TOut]:
+        """
+        :param page:
+        :param limit:
+        :param filters:
+        :return:
+        """
+        query = create_query(filters, self.table)
+
+        count = await self.table.find(query).count()
+
+        search = [
+            self.schema.from_orm(entry)
+            async for entry in self.table.find(query, skip=limit * (page - 1),
+                                               limit=limit)
+        ]
+
+        has_next = limit * (page + 1) <= count
+
+        return fields.ModelOutPaginate[TOut](
+            total=count,
+            page=page,
+            limit=limit,
+            has_next=has_next,
+            data=search)
 
     async def delete(self, pk: ObjectId) -> None:
         """Delete a model.

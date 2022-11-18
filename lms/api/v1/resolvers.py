@@ -4,6 +4,7 @@ import uuid
 
 from bson import ObjectId
 from strawberry.types import Info
+from typing import Optional
 
 from lms.api import fields as base_fields
 from lms.api.v1 import fields
@@ -11,12 +12,12 @@ from lms.database import models
 from lms.domain import borrowers_srv, linfo_srv, loan_offer_srv, payments_srv, reports_srv, users_srv
 
 
-async def get_borrowers() -> list[fields.BorrowerOut]:
+async def get_borrowers(page: Optional[int] = 0, limit: Optional[int] = 12) -> fields.ModelOutPaginate[fields.BorrowerOut]:
     """Fetch all the Borrower.
     Returns:
         list[Borrower]: retrieved borrower.
     """
-    return await borrowers_srv.collect()
+    return await borrowers_srv.paginate(page, limit)
 
 
 async def get_borrower(borrower_id: base_fields.PyObjectId) -> fields.BorrowerOut:

@@ -79,7 +79,7 @@ class Mutation:
     create_user: fields.AdminOut = (
         strawberry.mutation(
             resolver=resolvers.create_user,
-            permission_classes=[IsAuthenticated]
+            # permission_classes=[IsAuthenticated]
         )
     )
 

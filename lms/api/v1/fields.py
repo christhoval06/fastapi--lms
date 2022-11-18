@@ -2,7 +2,7 @@
 
 import datetime
 from decimal import Decimal
-from typing import Union, Optional, NewType, List
+from typing import Union, Optional, NewType, List, Generic, TypeVar
 
 import strawberry
 from beanie import PydanticObjectId
@@ -12,6 +12,17 @@ from strawberry.types import Info
 
 from lms.api import fields
 from lms.database import models
+
+T = TypeVar("T")
+
+
+@strawberry.type
+class ModelOutPaginate(Generic[T]):
+    total: int
+    limit: int
+    page: int
+    has_next: bool
+    data: list[T]
 
 
 @strawberry.experimental.pydantic.input(model=models.Borrower,
