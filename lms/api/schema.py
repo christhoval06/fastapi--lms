@@ -83,7 +83,7 @@ class Mutation:
         )
     )
 
-    auth_login: fields.AuthToken = (
+    auth_login: fields.LoginSuccess = (
         strawberry.mutation(
             resolver=resolvers.user_login,
         )

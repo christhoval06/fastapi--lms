@@ -138,7 +138,7 @@ async def create_user(data: fields.AdminCreate) -> fields.AdminOut:
     return await users_srv.create(data)
 
 
-async def user_login(username: str, password: str) -> fields.AuthToken:
+async def user_login(username: str, password: str) -> fields.LoginSuccess:
     """
     Sign In exists user.
     :param username: str

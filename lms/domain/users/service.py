@@ -38,18 +38,18 @@ class UsersService(GenericService[fields.AdminOut, fields.AdminCreate, fields.Ad
         except DuplicateKeyError:
             raise exceptions.DoesExistError(message=f"User with {data_object.email} exists")
 
-    async def login(self, username: str, password: str) -> fields.AuthToken:
+    async def login(self, username: str, password: str) -> fields.LoginSuccess:
         admin_exists = await self.exist(self.table.email == username)
 
         if not admin_exists:
-            raise exceptions.DoesNotExistError(message="Incorrect email or password")
+            raise exceptions.DoesNotExistError(id=None, message="Incorrect email or password")
 
         password = verify_password(password, admin_exists.password)
 
         if not password:
-            raise exceptions.DoesNotExistError(message="Incorrect email or password")
+            raise exceptions.DoesNotExistError(id=None, message="Incorrect email or password")
 
-        return fields.AuthToken(**{
+        return fields.LoginSuccess(**{
             "email": admin_exists.email,
             "full_name": admin_exists.full_name,
             "access_token": create_access_token(username),

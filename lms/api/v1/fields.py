@@ -244,8 +244,9 @@ class AuthLoginInput:
 
 
 @strawberry.type
-class AuthToken:
+class LoginSuccess:
     access_token: str
     refresh_token: str
     full_name: str
     email: str
+
