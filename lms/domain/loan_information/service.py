@@ -8,5 +8,5 @@ from lms.domain.generic.service import GenericService
 logger = get_logger(__name__)
 
 
-class LoanInformationService(GenericService[fields.BorrowerOut, fields.BorrowerCreate, fields.BorrowerUpdate]):
+class LoanInformationService(GenericService[fields.LoanInformationOut, fields.LoanInformationCreate, fields.LoanInformationUpdate]):
     pass

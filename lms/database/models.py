@@ -15,6 +15,8 @@ from pymongo import IndexModel
 
 # https://www.analyticsvidhya.com/blog/2020/09/mongodb-indexes-pymongo-tutorial/
 # https://pymongo.readthedocs.io/en/stable/api/pymongo/operations.html#pymongo.operations.IndexModel
+# https://dev.to/sirneij/django-authentication-system-github-actions-automated-testing-static-analysis-and-deployment-on-vercel-36n9
+# https://railway.app/pricing
 
 class Model(Document):
     """Document model abstraction."""
@@ -29,9 +31,6 @@ class Admin(Model):
     password: str
     active: bool
 
-    class Collection:
-        name = "admins"
-
     class Config:
         schema_extra = {
             "example": {
@@ -42,6 +41,7 @@ class Admin(Model):
         }
 
     class Settings:
+        name = "admins"
         indexes = [
             IndexModel(
                 [("email", pymongo.DESCENDING)],

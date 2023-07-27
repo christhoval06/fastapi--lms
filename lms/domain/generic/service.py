@@ -50,13 +50,13 @@ class GenericService(Generic[TOut, TCreate, TUpdate]):
         logger.info(f"Got {self.repository.table.__name__} by ID", entry=item)
         return item
 
-    async def collect(self) -> list[TOut]:
+    async def collect(self, **filters) -> list[TOut]:
         """Collect all models.
         Returns:
             list[TOut]: list of model.
         """
         logger.info(f"Collecting {self.repository.table.__name__}")
-        items = await self.repository.collect()
+        items = await self.repository.collect(**filters)
         logger.info(f"Collected {self.repository.table.__name__}", qty=len(items))
         return items
 

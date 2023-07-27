@@ -36,7 +36,7 @@ class Query:
         permission_classes=[IsAuthenticated]
     )
 
-    loan_information_payments: fields.PaymentOut = strawberry.field(
+    loan_information_payments: list[fields.PaymentOut] = strawberry.field(
         resolver=resolvers.get_loan_information_payments,
         permission_classes=[IsAuthenticated]
     )

@@ -33,6 +33,7 @@ async def get_borrower_loans(borrower_id: base_fields.PyObjectId, info: Info) ->
     Returns:
         list[LoanInformationOut]: retrieved borrower.
     """
+    print("borrower_id", str(borrower_id))
     return await info.context.linfo_srv.collect(borrower_id=borrower_id)
 
 

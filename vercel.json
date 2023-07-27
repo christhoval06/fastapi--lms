@@ -1,8 +1,8 @@
 {
-  "builds": [
-    {"src": "/lms/main.py", "use": "@vercel/python"}
-  ],
   "routes": [
-    {"src": "/(.*)", "dest": "lms/main.py"}
+    {
+      "src": "/(.*)",
+      "dest": "lms/main.py"
+    }
   ]
 }
