@@ -39,7 +39,7 @@ class UsersService(GenericService[fields.AdminOut, fields.AdminCreate, fields.Ad
             raise exceptions.DoesExistError(message=f"User with {data_object.email} exists")
 
     async def login(self, username: str, password: str) -> fields.LoginSuccess:
-        print('login self.table', self.table, self.table.email)
+        print('login self.table', self.table, self.table.full_name)
         admin_exists = await self.exist(self.table.email == username)
 
         if not admin_exists:
