@@ -5,7 +5,6 @@ from pydantic import BaseSettings
 
 VERSION_CODE = (0, 0, 2)
 
-
 class Settings(BaseSettings):
     """Basic settings for the application."""
 

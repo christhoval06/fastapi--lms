@@ -1,4 +1,10 @@
 {
+  "builds": [
+    {
+      "src": "/lms/main.py",
+      "use": "@vercel/python"
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",

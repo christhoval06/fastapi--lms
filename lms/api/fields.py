@@ -27,7 +27,6 @@ class Interface:
         Returns:
             InterfaceObj: new instance.
         """
-        print('entry', entry, 'cls', cls)
         return cls(**entry.dict(**kwargs))
 
     def to_dict(self, exclude_unset=False) -> dict:
