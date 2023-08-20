@@ -14,8 +14,6 @@ async def init_database() -> motor_asyncio.AsyncIOMotorClient:
     """
     client = motor_asyncio.AsyncIOMotorClient(settings.DATABASE_URL)
 
-    print('-----------------------', 'init_database')
-
     await init_beanie(
         database=client.get_default_database(),
         document_models=[models.Admin, models.Borrower, models.LoanInformation, models.Document, models.Payment,

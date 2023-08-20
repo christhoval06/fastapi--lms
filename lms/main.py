@@ -30,9 +30,7 @@ def create_application() -> FastAPI:
         on_startup=[init_database],
     )
 
-    @lms_app.on_event("startup")
-    async def startup_event():
-        init_database()
+    lms_app.add_event_handler('startup', init_database)
 
     # lms_app.add_middleware(AuthMiddleware, verify_header=verify_header)
     lms_app.add_middleware(
@@ -50,3 +48,5 @@ def create_application() -> FastAPI:
 
 
 app = create_application()
+
+# https://python.hotexamples.com/examples/fastapi/FastAPI/add_event_handler/python-fastapi-add_event_handler-method-examples.html

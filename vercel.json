@@ -9,6 +9,18 @@
     {
       "src": "/(.*)",
       "dest": "lms/main.py"
+    },
+    {
+      "src": "/",
+      "dest": "lms/main.py"
+    },
+    {
+      "src": "/docs",
+      "dest": "lms/main.py"
+    },
+    {
+      "src": "/openapi.json",
+      "dest": "lms/main.py"
     }
   ]
 }
